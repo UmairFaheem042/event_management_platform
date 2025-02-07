@@ -5,7 +5,6 @@ const cloudinary = require("cloudinary").v2;
 exports.createEvent = async (req, res) => {
   try {
     const { id } = req.user;
-    // const { id } = req.params;
     const {
       title,
       description,
@@ -51,7 +50,6 @@ exports.createEvent = async (req, res) => {
       sponsorsArray = sponsors.split(",").map((sponsor) => sponsor.trim());
     }
 
-    // image url generation
     if (!req.files || !req.files.image || req.files.image.length === 0) {
       return res.status(400).json({
         success: false,
@@ -66,7 +64,7 @@ exports.createEvent = async (req, res) => {
     });
     const imageUrl = result.secure_url;
 
-    const eventDateTime = new Date(`${date}T${time}:00Z`);
+    const eventDateTime = `${date} ${time}`;
 
     const newEvent = await Event.create({
       hostName: id,
@@ -106,7 +104,6 @@ exports.enrollEvent = async (req, res) => {
   try {
     const { id } = req.user;
     const { eventId } = req.params;
-    // const { id } = req.params;
 
     const { firstName, lastName, email, phoneNumber } = req.body;
     if (!firstName || !lastName || !email || !phoneNumber) {
@@ -116,7 +113,6 @@ exports.enrollEvent = async (req, res) => {
       });
     }
 
-    // checking if the user is already enrolled for the event
     const alreadyEnrolled = await Event.findOne({
       _id: req.params.eventId,
       attendees: id,
@@ -129,14 +125,12 @@ exports.enrollEvent = async (req, res) => {
       });
     }
 
-    // new attendee and appending the event's attendees array
     const newAttendee = await Event.findByIdAndUpdate(
       eventId,
       { $push: { attendees: id } },
       { new: true }
     );
 
-    // updating the user's eventsEnrolled array
     await User.findByIdAndUpdate(
       id,
       { $push: { eventsEnrolled: eventId } },
@@ -158,6 +152,20 @@ exports.enrollEvent = async (req, res) => {
 
 exports.displayAllEvent = async (req, res) => {
   try {
+    const { id } = req.user;
+    const isUser = await User.findById(id);
+    if (!isUser)
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+
+    const allEvents = await Event.find();
+    res.status(200).json({
+      success: true,
+      message: "All events displayed successfully",
+      data: allEvents,
+    });
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -169,6 +177,29 @@ exports.displayAllEvent = async (req, res) => {
 
 exports.displaySingleEvent = async (req, res) => {
   try {
+    const { id } = req.user;
+    const { eventId } = req.params;
+
+    const isUser = await User.findById(id);
+    if (!isUser)
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+
+    const isEvent = await Event.findById(eventId);
+    if (!isEvent)
+      return res.status(404).json({
+        success: false,
+        message: "Event not found",
+      });
+
+    const eventDetail = await Event.findOne({ _id: eventId });
+    res.status(200).json({
+      success: true,
+      message: "Event displayed successfully",
+      data: eventDetail,
+    });
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -178,19 +209,45 @@ exports.displaySingleEvent = async (req, res) => {
   }
 };
 
-exports.updateEvent = async (req, res) => {
-  try {
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "An error occurred while updating an event",
-      error: error.message,
-    });
-  }
-};
-
 exports.deleteEvent = async (req, res) => {
   try {
+    const { id } = req.user;
+    const { eventId } = req.params;
+
+    const isUser = await User.findById(id);
+    if (!isUser)
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+
+    const isEvent = await Event.findById(eventId);
+    if (!isEvent)
+      return res.status(404).json({
+        success: false,
+        message: "Event not found",
+      });
+
+    if (isEvent.hostName.toString() !== id.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: "You are not authorized to delete this event",
+      });
+    }
+    await Event.findByIdAndDelete(eventId);
+    await User.updateMany(
+      { eventsEnrolled: eventId },
+      { $pull: { eventsEnrolled: eventId } }
+    );
+
+    await User.findByIdAndUpdate(id, {
+      $pull: { eventsCreated: eventId },
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Event deleted successfully",
+    });
   } catch (error) {
     res.status(500).json({
       success: false,
