@@ -1,25 +1,26 @@
-import React, { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import logo from "../assets/logo.png";
-
-// toDO
-// Dashboard item will be shown only if user is authenticated
-// My Events item will be shown only if user is authenticated
-
-// Sign In item will be shown only if user is not authenticated
-// Sign Up item will be shown only if user is not authenticated
+import { useAuth } from "../context/AuthContext";
+import Loading from "./Loading";
 
 const Header = () => {
+  const { isAuthenticated, logout, loading } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const token = document.cookie;
-  const isAuthenticated = Boolean(token);
-  //   const isAuthenticated = true;
+
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await logout();
+    navigate("/signin");
+  };
 
   const authNavigation = [
     { name: "Dashboard", href: "dashboard" },
     { name: "My Events", href: "my_events" },
     { name: "Events", href: "event" },
     { name: "About", href: "about" },
+    { name: "Sign Out", href: "signin" },
   ];
 
   const guestNavigation = [
@@ -29,6 +30,8 @@ const Header = () => {
     { name: "Sign In", href: "signin" },
   ];
 
+  // if (loading) return <Loading />;
+
   const navigation = isAuthenticated ? authNavigation : guestNavigation;
 
   return (
@@ -36,7 +39,6 @@ const Header = () => {
       <nav className="flex items-center justify-between p-6 lg:px-4">
         <div className="flex md:flex-1">
           <Link to={"/"}>
-            {/* <h1 className="font-bold">GatherPro</h1> */}
             <img src={logo} className="w-[100px]" alt="GatherPro" />
           </Link>
         </div>
@@ -72,12 +74,25 @@ const Header = () => {
           </div>
         )}
 
-        <div className="text-[0.9rem] hidden md:flex md:gap-x-12">
-          {navigation.map((item) => (
-            <NavLink key={item.name} to={item.href} className="text-gray-700">
-              {item.name}
-            </NavLink>
-          ))}
+        <div className="text-[0.9rem] hidden md:flex items-center md:gap-x-12">
+          {navigation.map((item) =>
+            item.name === "Sign Out" ? (
+              <button
+                key={item.name}
+                className="px-4 py-2 rounded-md cursor-pointer bg-black text-white"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleSignOut();
+                }}
+              >
+                {item.name}
+              </button>
+            ) : (
+              <NavLink key={item.name} to={item.href} className="text-gray-700">
+                {item.name}
+              </NavLink>
+            )
+          )}
         </div>
       </nav>
     </header>

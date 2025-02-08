@@ -4,13 +4,14 @@ import "./index.css";
 import App from "./App.jsx";
 import ErrorComponent from "./components/ErrorComponent.jsx";
 import { BrowserRouter } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
 
 createRoot(document.getElementById("root")).render(
-  // <StrictMode>
-  <ErrorComponent>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </ErrorComponent>
-  // </StrictMode>
+  <BrowserRouter>
+    <ErrorComponent>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </ErrorComponent>
+  </BrowserRouter>
 );

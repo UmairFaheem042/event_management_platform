@@ -1,10 +1,60 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import axios from "axios";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const SignUp = () => {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  function resetForm() {
+    setFormData({
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    });
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    try {
+      const data = await axios.post(
+        "http://localhost:3000/api/v1/user/signup",
+        {
+          fName: formData.firstName,
+          lName: formData.lastName,
+          email: formData.email,
+          password: formData.password,
+          confirmPassword: formData.confirmPassword,
+        }
+      );
+      toast.success(data.data.message);
+      console.log(data);
+      resetForm();
+      navigate("/signin");
+    } catch (error) {
+      console.error(
+        "Registration Error:",
+        error.response?.data || error.message
+      );
+      toast.error(error.response?.data.message || error.message);
+    }
+  }
+
   return (
     <div className="flex-1 flex items-center justify-center">
-      <form className="max-w-[500px] w-full  flex flex-col gap-5 px-4 lg:p-0">
+      <form
+        className="max-w-[500px] w-full  flex flex-col gap-5 px-4 lg:p-0"
+        onSubmit={handleSubmit}
+      >
         <div className="flex flex-col gap-1">
           <label
             htmlFor="firstName"
@@ -17,6 +67,10 @@ const SignUp = () => {
             id="firstName"
             className="border border-gray-200 outline-none rounded p-2 placeholder:text-gray-300"
             placeholder="Umair"
+            value={formData.firstName}
+            onChange={(e) =>
+              setFormData({ ...formData, firstName: e.target.value })
+            }
             required
           />
         </div>
@@ -32,6 +86,10 @@ const SignUp = () => {
             id="lastName"
             className="border border-gray-200 outline-none rounded p-2 placeholder:text-gray-300"
             placeholder="Faheem"
+            value={formData.lastName}
+            onChange={(e) =>
+              setFormData({ ...formData, lastName: e.target.value })
+            }
           />
         </div>
         <div className="flex-1 flex flex-col gap-1">
@@ -43,6 +101,10 @@ const SignUp = () => {
             id="email"
             className="border border-gray-200 outline-none rounded p-2 placeholder:text-gray-300"
             placeholder="umair@example.com"
+            value={formData.email}
+            onChange={(e) =>
+              setFormData({ ...formData, email: e.target.value })
+            }
             required
           />
         </div>
@@ -58,6 +120,10 @@ const SignUp = () => {
             id="password"
             className="border border-gray-200 outline-none rounded p-2 placeholder:text-gray-300"
             placeholder="********"
+            value={formData.password}
+            onChange={(e) =>
+              setFormData({ ...formData, password: e.target.value })
+            }
             required
           />
         </div>
@@ -73,10 +139,17 @@ const SignUp = () => {
             id="password"
             className="border border-gray-200 outline-none rounded p-2 placeholder:text-gray-300"
             placeholder="********"
+            value={formData.confirmPassword}
+            onChange={(e) =>
+              setFormData({ ...formData, confirmPassword: e.target.value })
+            }
             required
           />
         </div>
-        <button className="text-sm font-medium bg-green-400 text-white transition-all px-6 py-3 rounded-md cursor-pointer">
+        <button
+          type="submit"
+          className="text-sm font-medium bg-green-400 text-white transition-all px-6 py-3 rounded-md cursor-pointer"
+        >
           Create Account
         </button>
         <div className="text-center">

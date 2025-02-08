@@ -1,10 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const LandingPage = () => {
-  const token = document.cookie;
-  const isAuthenticated = Boolean(token);
-  // const isAuthenticated = true;
+  const { isAuthenticated } = useAuth();
   return (
     <div className="flex flex-1 bg-white w-full max-w-[1400px] mx-auto p-6 lg:px-4">
       {/* hero */}
