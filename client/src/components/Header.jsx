@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import logo from "../assets/logo.png";
 
 // toDO
 // Dashboard item will be shown only if user is authenticated
@@ -12,7 +13,7 @@ const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const token = document.cookie;
   const isAuthenticated = Boolean(token);
-//   const isAuthenticated = true;
+  //   const isAuthenticated = true;
 
   const authNavigation = [
     { name: "Dashboard", href: "dashboard" },
@@ -22,7 +23,7 @@ const Header = () => {
   ];
 
   const guestNavigation = [
-    { name: "Events", href: "events" },
+    { name: "Events", href: "event" },
     { name: "About", href: "about" },
     { name: "Sign Up", href: "signup" },
     { name: "Sign In", href: "signin" },
@@ -31,10 +32,13 @@ const Header = () => {
   const navigation = isAuthenticated ? authNavigation : guestNavigation;
 
   return (
-    <header className="w-full max-w-[1400px] mx-auto sticky inset-x-0 top-0 z-50">
+    <header className="bg-white w-full max-w-[1400px] mx-auto sticky inset-x-0 top-0 z-50">
       <nav className="flex items-center justify-between p-6 lg:px-4">
         <div className="flex md:flex-1">
-          <h1 className="font-bold">GatherPro</h1>
+          <Link to={"/"}>
+            {/* <h1 className="font-bold">GatherPro</h1> */}
+            <img src={logo} className="w-[100px]" alt="GatherPro" />
+          </Link>
         </div>
         <div className="flex md:hidden">
           <button

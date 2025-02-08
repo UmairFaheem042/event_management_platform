@@ -25,7 +25,7 @@ const LandingPage = () => {
         </p>
         <div className="flex gap-5">
           <Link to={`${isAuthenticated ? "/dashboard" : "/signup"}`}>
-            <button className="text-sm bg-green-500 hover:bg-green-600 transition-all px-6 py-3 rounded-md text-white cursor-pointer">
+            <button className="text-sm bg-green-600 hover:bg-green-600 transition-all px-6 py-3 rounded-md text-white cursor-pointer">
               {isAuthenticated ? "Explore Events" : "Create Account"}
             </button>
           </Link>
