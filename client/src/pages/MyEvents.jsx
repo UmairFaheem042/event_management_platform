@@ -10,7 +10,6 @@ const MyEvents = () => {
         "http://localhost:3000/api/v1/event/display_my_events",
         { withCredentials: true }
       );
-      console.log(response.data.data);
       setMyEventData(response.data.data);
     } catch (error) {}
   }
@@ -35,7 +34,7 @@ const MyEvents = () => {
         </form>
       </header>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {myEventData && myEventData.map((data) => <Card data={data} />)}
+        {myEventData && myEventData.map((data) => <Card key={data?._id} data={data} />)}
       </div>
     </div>
   );

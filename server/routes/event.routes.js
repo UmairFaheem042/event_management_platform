@@ -22,10 +22,10 @@ router.post("/enroll_event/:eventId", userAuthenticate, enrollEvent);
 
 router.get("/display_my_events", userAuthenticate, displayMyEvents);
 
-router.get("/display_events", userAuthenticate, displayAllEvent);
+router.get("/display_events", displayAllEvent);
 router.get(
   "/display_single_event/:eventId",
-  userAuthenticate,
+  // userAuthenticate,
   displaySingleEvent
 );
 

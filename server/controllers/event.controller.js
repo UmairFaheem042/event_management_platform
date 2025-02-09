@@ -67,6 +67,7 @@ exports.createEvent = async (req, res) => {
     const eventDateTime = `${date} ${time}`;
 
     const newEvent = await Event.create({
+      hostId: id,
       hostName: id,
       attendees: [],
       title,
@@ -102,16 +103,8 @@ exports.createEvent = async (req, res) => {
 
 exports.enrollEvent = async (req, res) => {
   try {
-    const { id } = req.user;
+    const { id, firstName, lastName, email } = req.user;
     const { eventId } = req.params;
-
-    const { firstName, lastName, email, phoneNumber } = req.body;
-    if (!firstName || !lastName || !email || !phoneNumber) {
-      return res.status(400).json({
-        success: false,
-        message: "All fields are required",
-      });
-    }
 
     const alreadyEnrolled = await Event.findOne({
       _id: req.params.eventId,
@@ -140,6 +133,7 @@ exports.enrollEvent = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Enrolled successfully",
+      data: newAttendee,
     });
   } catch (error) {
     res.status(500).json({
@@ -152,13 +146,13 @@ exports.enrollEvent = async (req, res) => {
 
 exports.displayAllEvent = async (req, res) => {
   try {
-    const { id } = req.user;
-    const isUser = await User.findById(id);
-    if (!isUser)
-      return res.status(404).json({
-        success: false,
-        message: "User not found",
-      });
+    // const { id } = req.user;
+    // const isUser = await User.findById(id);
+    // if (!isUser)
+    //   return res.status(404).json({
+    //     success: false,
+    //     message: "User not found",
+    //   });
 
     const allEvents = await Event.find();
     res.status(200).json({
@@ -207,15 +201,15 @@ exports.displayMyEvents = async (req, res) => {
 
 exports.displaySingleEvent = async (req, res) => {
   try {
-    const { id } = req.user;
+    // const { id } = req.user;
     const { eventId } = req.params;
 
-    const isUser = await User.findById(id);
-    if (!isUser)
-      return res.status(404).json({
-        success: false,
-        message: "User not found",
-      });
+    // const isUser = await User.findById(id);
+    // if (!isUser)
+    //   return res.status(404).json({
+    //     success: false,
+    //     message: "User not found",
+    //   });
 
     const isEvent = await Event.findById(eventId);
     if (!isEvent)
