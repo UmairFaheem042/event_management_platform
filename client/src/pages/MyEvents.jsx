@@ -7,7 +7,7 @@ const MyEvents = () => {
   async function fetchMyEvents() {
     try {
       const response = await axios.get(
-        "http://localhost:3000/api/v1/event/display_my_events",
+        `${import.meta.env.VITE_API_URL}/api/v1/event/display_my_events`,
         { withCredentials: true }
       );
       setMyEventData(response.data.data);
@@ -34,7 +34,8 @@ const MyEvents = () => {
         </form>
       </header>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {myEventData && myEventData.map((data) => <Card key={data?._id} data={data} />)}
+        {myEventData &&
+          myEventData.map((data) => <Card key={data?._id} data={data} />)}
       </div>
     </div>
   );

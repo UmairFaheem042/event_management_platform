@@ -43,7 +43,7 @@ const Dashboard = () => {
   async function fetchUser() {
     try {
       const response = await axios.get(
-        "http://localhost:3000/api/v1/user/get_user",
+        `${import.meta.env.VITE_API_URL}/api/v1/user/get_user`,
         {
           withCredentials: true,
         }
@@ -60,7 +60,7 @@ const Dashboard = () => {
   async function fetchEventDetails() {
     try {
       const response = await axios.get(
-        "http://localhost:3000/api/v1/event/display_my_events",
+        `${import.meta.env.VITE_API_URL}/api/v1/event/display_my_events`,
         { withCredentials: true }
       );
       setEventData(response.data.data);

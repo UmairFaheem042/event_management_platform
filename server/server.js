@@ -8,9 +8,10 @@ const userRoutes = require("./routes/user.routes");
 const eventRoutes = require("./routes/event.routes");
 
 const app = express();
+
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: process.env.CLIENT_URL,
     credentials: true,
   })
 );

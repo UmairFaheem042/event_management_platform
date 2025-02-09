@@ -146,14 +146,6 @@ exports.enrollEvent = async (req, res) => {
 
 exports.displayAllEvent = async (req, res) => {
   try {
-    // const { id } = req.user;
-    // const isUser = await User.findById(id);
-    // if (!isUser)
-    //   return res.status(404).json({
-    //     success: false,
-    //     message: "User not found",
-    //   });
-
     const allEvents = await Event.find();
     res.status(200).json({
       success: true,

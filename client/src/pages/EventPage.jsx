@@ -4,8 +4,6 @@ import axios from "axios";
 import { formatDate } from "../utils/dateFormat";
 
 const EventPage = () => {
-
-  
   const navigate = useNavigate();
   const { eventId } = useParams();
   const [eventData, setEventData] = useState(null);
@@ -16,7 +14,7 @@ const EventPage = () => {
   async function fetchUser() {
     try {
       const response = await axios.get(
-        "http://localhost:3000/api/v1/user/get_user",
+        `${import.meta.env.VITE_API_URL}/api/v1/user/get_user`,
         {
           withCredentials: true,
         }
@@ -29,10 +27,12 @@ const EventPage = () => {
   }
 
   async function getEventDetails() {
-    window.scrollTo(0,0)
+    window.scrollTo(0, 0);
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/v1/event/display_single_event/${eventId}`
+        `${
+          import.meta.env.VITE_API_URL
+        }/api/v1/event/display_single_event/${eventId}`
       );
 
       const event = response.data.data;
@@ -52,7 +52,7 @@ const EventPage = () => {
   async function enrollEvent() {
     try {
       const response = await axios.post(
-        `http://localhost:3000/api/v1/event/enroll_event/${eventId}`,
+        `${import.meta.env.VITE_API_URL}/api/v1/event/enroll_event/${eventId}`,
         {},
         { withCredentials: true }
       );
@@ -71,7 +71,7 @@ const EventPage = () => {
 
     try {
       await axios.delete(
-        `http://localhost:3000/api/v1/event/delete_event/${eventId}`,
+        `${import.meta.env.VITE_API_URL}/api/v1/event/delete_event/${eventId}`,
         { withCredentials: true }
       );
 
@@ -93,7 +93,7 @@ const EventPage = () => {
   return (
     <div className="flex flex-col flex-1 bg-white w-full max-w-[1400px] mx-auto p-6 lg:px-4">
       <div className="flex flex-col gap-2 rounded-md p-6 w-full lg:max-w-[80%] mx-auto">
-        {(userData.length !== 0 && userData?._id === eventData?.hostName) && (
+        {userData.length !== 0 && userData?._id === eventData?.hostName && (
           <button
             onClick={deleteEvent}
             className="bg-red-500 text-white p-2 w-fit rounded-md px-6 py-2 mt-4 cursor-pointer"

@@ -27,7 +27,7 @@ const SignUp = () => {
     e.preventDefault();
     try {
       const data = await axios.post(
-        "http://localhost:3000/api/v1/user/signup",
+        `${import.meta.env.VITE_API_URL}/api/v1/user/signup`,
         {
           fName: formData.firstName,
           lName: formData.lastName,

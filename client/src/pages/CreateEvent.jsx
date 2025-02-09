@@ -61,7 +61,7 @@ const CreateEvent = () => {
         formDataToSend.append("image", image);
       }
       const response = await axios.post(
-        "http://localhost:3000/api/v1/event/create_event",
+        `${import.meta.env.VITE_API_URL}/api/v1/event/create_event`,
         formDataToSend,
         {
           withCredentials: true,
