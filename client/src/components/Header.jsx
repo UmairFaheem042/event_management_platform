@@ -19,23 +19,20 @@ const Header = () => {
     { name: "Dashboard", href: "dashboard" },
     { name: "My Events", href: "my_events" },
     { name: "Events", href: "event" },
-    { name: "About", href: "about" },
     { name: "Sign Out", href: "signin" },
   ];
 
   const guestNavigation = [
     { name: "Events", href: "event" },
-    { name: "About", href: "about" },
     { name: "Sign Up", href: "signup" },
     { name: "Sign In", href: "signin" },
   ];
 
-  // if (loading) return <Loading />;
 
   const navigation = isAuthenticated ? authNavigation : guestNavigation;
 
   return (
-    <header className="bg-white w-full max-w-[1400px] mx-auto sticky inset-x-0 top-0 z-50">
+    <header className=" bg-white w-full max-w-[1400px] mx-auto sticky inset-x-0 top-0 z-50">
       <nav className="flex items-center justify-between p-6 lg:px-4">
         <div className="flex md:flex-1">
           <Link to={"/"}>

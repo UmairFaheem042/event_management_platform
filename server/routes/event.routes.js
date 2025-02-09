@@ -5,6 +5,7 @@ const {
   displayAllEvent,
   displaySingleEvent,
   deleteEvent,
+  displayMyEvents,
 } = require("../controllers/event.controller");
 const { upload } = require("../middlewares/multer");
 const { userAuthenticate } = require("../middlewares/authenticate");
@@ -18,6 +19,8 @@ router.post(
   createEvent
 );
 router.post("/enroll_event/:eventId", userAuthenticate, enrollEvent);
+
+router.get("/display_my_events", userAuthenticate, displayMyEvents);
 
 router.get("/display_events", userAuthenticate, displayAllEvent);
 router.get(

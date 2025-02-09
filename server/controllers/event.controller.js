@@ -175,6 +175,36 @@ exports.displayAllEvent = async (req, res) => {
   }
 };
 
+exports.displayMyEvents = async (req, res) => {
+  try {
+    const { id } = req.user;
+
+    const myEvents = await Event.find({ hostName: id }).sort({
+      eventDateTime: -1,
+    });
+
+    if (!myEvents.length) {
+      return res.status(200).json({
+        success: true,
+        message: "No events found",
+        data: [],
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Events retrieved successfully",
+      data: myEvents,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error retrieving events",
+      error: error.message,
+    });
+  }
+};
+
 exports.displaySingleEvent = async (req, res) => {
   try {
     const { id } = req.user;
