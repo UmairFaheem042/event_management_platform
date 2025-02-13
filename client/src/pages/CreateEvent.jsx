@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const CreateEvent = () => {
   const navigate = useNavigate();
@@ -71,7 +71,6 @@ const CreateEvent = () => {
         }
       );
 
-      console.log(response);
       resetForm();
       navigate("/my_events");
     } catch (error) {
@@ -298,6 +297,7 @@ const CreateEvent = () => {
               setFormData({ ...formData, quantity: e.target.value })
             }
             required
+            min={0}
           />
         </div>
 
@@ -316,7 +316,6 @@ const CreateEvent = () => {
             onChange={(e) =>
               setFormData({ ...formData, sponsors: e.target.value })
             }
-            required
           />
         </div>
 

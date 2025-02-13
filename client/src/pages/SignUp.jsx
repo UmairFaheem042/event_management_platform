@@ -37,7 +37,7 @@ const SignUp = () => {
         }
       );
       toast.success(data.data.message);
-      console.log(data);
+
       resetForm();
       navigate("/signin");
     } catch (error) {

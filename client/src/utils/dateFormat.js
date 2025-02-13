@@ -6,8 +6,6 @@ export const formatDate = (eventDate) => {
   const now = new Date();
   const result = eventDateTime < now ? "Passed" : "Upcoming";
 
-  // console.log("Event Status:", result); // Output: "Upcoming" or "Passed"
-
   return result;
 };
 
